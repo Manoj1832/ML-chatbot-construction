@@ -1,85 +1,120 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SITE_CONTENT } from "@/data/site-content";
+import { trackEvent } from "@/lib/telemetry";
 
 const Hero = () => {
-  const slides = [
-    { src: "/assets/hero0.jpg", title: "The family is incomplete without a own home", sub: "Adithya ensures the Happy Customers" },
-    { src: "/assets/hero1.jpg", title: "Build With Confidence", sub: "Residential & commercial projects" },
-    { src: "/assets/hero2.jpg", title: "On-Time Delivery", sub: "Planned, tracked, delivered" },
-    { src: "/assets/hero3.jpg", title: "Premium Materials", sub: "IS/ISO certified brands" },
-    { src: "/assets/hero4.jpg", title: "Experienced Engineers", sub: "Structural integrity assured" },
-    { src: "/assets/hero5.jpg", title: "Transparent Pricing", sub: "Clear scope and stages" },
-    { src: "/assets/hero6.jpg", title: "Warranty & Support", sub: "Post-handover assistance" },
-  ];
-  const [api, setApi] = useState<CarouselApi | null>(null);
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!api) return;
-    const interval = setInterval(() => api.scrollNext(), 4000);
-    const update = () => setCurrent(api.selectedScrollSnap());
-    update();
-    api.on("select", update);
-    api.on("reInit", update);
-    return () => {
-      clearInterval(interval);
-      api.off("select", update);
-    };
-  }, [api]);
+  const { hero } = SITE_CONTENT;
 
   return (
-    <section className="relative w-full pt-20 md:pt-24 overflow-hidden">
-      <div className="absolute inset-0 premium-gradient-light"></div>
-      <div className="absolute inset-0 opacity-[0.06] bg-[url('/assets/textures/noise.png')] pointer-events-none"></div>
+    <section className="relative w-full pt-16 bg-[#F5F5F5] border-b border-[#EAEAEA] overflow-hidden">
+      <div className="relative min-h-[50vh] md:min-h-[78vh] flex flex-col justify-between">
+        {/* Art-directed responsive architectural photography */}
+        <picture className="absolute inset-0 w-full h-full pointer-events-none select-none">
+          <source
+            media="(min-width: 768px)"
+            srcSet="/assets/hero/hero-desktop.webp"
+            type="image/webp"
+          />
+          <source
+            media="(min-width: 768px)"
+            srcSet="/assets/hero/hero-desktop.png"
+            type="image/png"
+          />
+          <source
+            srcSet="/assets/hero/hero-mobile.webp"
+            type="image/webp"
+          />
+          <img
+            src="/assets/hero/hero-mobile.png"
+            alt="Minimalist concrete residence designed and built by Adithya Constructions"
+            className="w-full h-full object-cover object-bottom md:object-right"
+            fetchPriority="high"
+            loading="eager"
+            decoding="sync"
+          />
+        </picture>
 
-      <div className="relative z-10">
-        <Carousel opts={{ loop: true }} setApi={setApi} className="w-full">
-          <CarouselContent>
-            {slides.map((s, index) => (
-              <CarouselItem key={s.src} className="">
-                <div className="relative w-full h-[58vh] sm:h-[64vh] md:h-[78vh]">
-                  <img src={s.src} alt="Hero" className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
-                  <div className="absolute bottom-6 left-4 sm:left-8 max-w-[720px]">
-                    <motion.h1
-                      key={`title-${current}`}
-                      initial={{ y: 14, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.4 }}
-                      className={`text-3xl sm:text-4xl md:text-5xl font-heading font-bold ${
-                        slides[current].title === "Transparent Pricing" ? "text-black" : "text-white"
-                      }`}
-                    >
-                      {slides[current].title}
-                    </motion.h1>
-                    <motion.p
-                      key={`sub-${current}`}
-                      initial={{ y: 12, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.4, delay: 0.05 }}
-                      className="mt-2 text-white/80 text-sm sm:text-base"
-                    >
-                      {slides[current].sub}
-                    </motion.p>
-                    <motion.div
-                      initial={{ y: 14, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.1 }}
-                      className="mt-3 flex gap-2"
-                    >
-                      <Button variant="gold" size="lg" asChild>
-                        <Link to="/appointment">Get Started</Link>
-                      </Button>
-                    </motion.div>
-                  </div>
+        {/* Subtle top-left legibility scrim */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-[#FFFFFF]/90 via-[#FFFFFF]/65 to-[#FFFFFF]/10 md:bg-gradient-to-r md:from-[#F5F5F5]/90 md:via-[#F5F5F5]/45 md:to-transparent pointer-events-none"
+        />
+
+        {/* Editorial Content */}
+        <div className="relative z-10 container mx-auto px-4 lg:px-8 pt-8 pb-6 md:py-20 flex-1 flex flex-col justify-start md:justify-center">
+          <div className="max-w-xl">
+            <p className="eyebrow text-[#444444] mb-2 md:mb-3">
+              {hero.eyebrow}
+            </p>
+            <h1
+              className="font-display font-semibold text-[#111111] tracking-[-0.03em] leading-[1.08] mb-3 md:mb-4"
+              style={{ fontSize: "var(--text-hero)" }}
+            >
+              {hero.headline}
+            </h1>
+            <p className="text-[#444444] text-sm md:text-base leading-relaxed max-w-lg mb-5 md:mb-7">
+              <span className="md:hidden">{hero.mobileSubhead}</span>
+              <span className="hidden md:inline">{hero.desktopSubhead}</span>
+            </p>
+
+            <div className="flex flex-row gap-2.5 md:gap-3">
+              <Button size="default" className="md:h-11 md:px-6" asChild>
+                <Link
+                  to="/appointment"
+                  onClick={() => trackEvent({ event: "cta_click", metadata: { location: "hero_book" } })}
+                >
+                  {hero.primaryCta}
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              </Button>
+              <Button variant="outline-gold" size="default" className="md:h-11 md:px-6" asChild>
+                <Link
+                  to="/projects"
+                  onClick={() => trackEvent({ event: "cta_click", metadata: { location: "hero_projects" } })}
+                >
+                  {hero.secondaryCta}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Capability Bar */}
+        <div className="relative z-10 bg-[#FFFFFF]/95 backdrop-blur-sm border-t border-[#EAEAEA]">
+          <div className="container mx-auto px-4 lg:px-8">
+            {/* Mobile: single scrollable row */}
+            <div className="flex lg:hidden overflow-x-auto scrollbar-hide gap-0 -mx-4 px-4">
+              {hero.capabilities.map((item, idx) => (
+                <div
+                  key={item}
+                  className="shrink-0 py-2.5 pr-5 flex items-center gap-2 border-r border-[#EAEAEA] last:border-r-0"
+                >
+                  <span className="text-[10px] font-mono text-[#777777] tabular-nums">
+                    0{idx + 1}
+                  </span>
+                  <span className="text-[11px] font-medium text-[#111111] whitespace-nowrap">
+                    {item}
+                  </span>
                 </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+              ))}
+            </div>
+            {/* Desktop: 4-col grid */}
+            <div className="hidden lg:grid grid-cols-4 divide-x divide-[#EAEAEA]">
+              {hero.capabilities.map((item, idx) => (
+                <div key={item} className="py-3 px-6 flex items-center gap-3">
+                  <span className="text-xs font-mono text-[#777777] tabular-nums">
+                    0{idx + 1}
+                  </span>
+                  <span className="text-sm font-medium text-[#111111]">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

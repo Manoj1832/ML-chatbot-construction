@@ -120,12 +120,12 @@ const PricingPackages = () => {
                 </Accordion>
 
                 <div className="mt-6">
-                  <Link to="/construction-cost">
+                  <Link to="/appointment">
                     <Button 
                       className="w-full gold-gradient text-foreground"
                       data-testid={`button-calculate-${tier.id}`}
                     >
-                      Calculate Cost
+                      Book Consultation
                     </Button>
                   </Link>
                 </div>
@@ -138,9 +138,9 @@ const PricingPackages = () => {
           <p className="text-muted-foreground mb-4">
             Looking for a house construction company in Coimbatore & Salem? You are at the right spot.
           </p>
-          <Link to="/construction-cost">
+          <Link to="/appointment">
             <Button size="lg" className="gold-gradient text-foreground" data-testid="button-cost-calculator">
-              Try Our Construction Cost Calculator
+              Schedule a Free Consultation
             </Button>
           </Link>
         </div>

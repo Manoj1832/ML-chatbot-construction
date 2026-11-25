@@ -1,70 +1,85 @@
 import { Link } from "react-router-dom";
-import { Instagram, Mail, Phone, MapPin } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Instagram } from "lucide-react";
+import { SITE_CONFIG } from "@/config/site";
+import { BrandIcon } from "@/components/common/BrandIcon";
 
 const Footer = () => {
   return (
-    <footer className="bg-foreground text-background py-12">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <h3 className="text-xl font-heading font-bold mb-4 text-background">
-              Adithya Constructions & Architects
-            </h3>
-            <p className="text-sm text-background/80 mb-4">
-              We build your dreams with precision, quality, and dedication.
+    <footer className="bg-[#111111] text-[#FFFFFF] border-t border-[#2E2E2E]">
+      <div className="container mx-auto px-4 lg:px-8 pt-10 pb-20 md:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+          {/* Brand & Leadership */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link to="/" className="inline-flex items-center gap-3">
+              <div className="w-11 h-11 bg-[#222222] border border-[#2E2E2E] p-1.5 flex items-center justify-center shrink-0">
+                <img
+                  src="/assets/logo.png"
+                  alt="Adithya Constructions Logo"
+                  width={36}
+                  height={36}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div>
+                <p className="font-display font-semibold text-base tracking-[-0.02em] text-[#FFFFFF]">
+                  {SITE_CONFIG.name}
+                </p>
+                <p className="text-xs text-[#B5B5B5]">{SITE_CONFIG.tagline}</p>
+              </div>
+            </Link>
+
+            <p className="text-sm text-[#B5B5B5] leading-relaxed max-w-sm">
+              Architectural design, structural engineering, and turnkey residential and commercial construction across Coimbatore and Salem, Tamil Nadu.
             </p>
-            <div className="flex items-center gap-3 mb-2">
-              <Avatar className="h-8 w-8 border border-background/30 rounded-md overflow-hidden">
-                <AvatarImage src="/assets/owner.png" alt="Owner" />
-                <AvatarFallback className="text-xs font-bold">B</AvatarFallback>
-              </Avatar>
-              <p className="text-sm text-background/80">
-                Er. BOOBALAN .V, B.E.
-                <br />
-                Proprietor
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Avatar className="h-8 w-8 border border-background/30 rounded-md overflow-hidden">
-                <AvatarImage src="/assets/owner2.jpg" alt="Proprietor" />
-                <AvatarFallback className="text-xs font-bold">P</AvatarFallback>
-              </Avatar>
-              <p className="text-sm text-background/80">
-                Er. Premi T, B.E.
-                <br />
-                Proprietor • Operations & Client Relations
-              </p>
+
+            <div className="space-y-3 pt-2 border-t border-[#2E2E2E]">
+              {SITE_CONFIG.leadership.map((leader) => (
+                <div key={leader.name} className="flex items-center gap-3">
+                  <img
+                    src={leader.image}
+                    alt={leader.name}
+                    width={36}
+                    height={36}
+                    className="w-9 h-9 object-cover border border-[#2E2E2E]"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-[#FFFFFF] leading-tight">{leader.name}</p>
+                    <p className="text-xs text-[#B5B5B5] leading-tight mt-0.5">{leader.role}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-heading font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+          {/* Navigation */}
+          <div className="lg:col-span-2">
+            <h2 className="text-xs uppercase tracking-[0.14em] text-[#B5B5B5] font-medium mb-4">
+              Studio
+            </h2>
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/about" className="text-sm text-background/80 hover:text-background transition-colors">
+                <Link to="/about" className="text-[#EAEAEA] hover:text-[#FFFFFF] transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-sm text-background/80 hover:text-background transition-colors">
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects" className="text-sm text-background/80 hover:text-background transition-colors">
+                <Link to="/projects" className="text-[#EAEAEA] hover:text-[#FFFFFF] transition-colors">
                   Projects
                 </Link>
               </li>
               <li>
-                <Link to="/quality-checklist" className="text-sm text-background/80 hover:text-background transition-colors">
+                <Link to="/packages" className="text-[#EAEAEA] hover:text-[#FFFFFF] transition-colors">
+                  Packages
+                </Link>
+              </li>
+              <li>
+                <Link to="/quality-checklist" className="text-[#EAEAEA] hover:text-[#FFFFFF] transition-colors">
                   Quality Checklist
                 </Link>
               </li>
               <li>
-                <Link to="/careers" className="text-sm text-background/80 hover:text-background transition-colors">
+                <Link to="/careers" className="text-[#EAEAEA] hover:text-[#FFFFFF] transition-colors">
                   Careers
                 </Link>
               </li>
@@ -72,71 +87,96 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-lg font-heading font-semibold mb-4">Our Services</h4>
-            <ul className="space-y-2">
-              <li className="text-sm text-background/80">Residential House Construction</li>
-              <li className="text-sm text-background/80">Commercial Construction</li>
-              <li className="text-sm text-background/80">Architectural Designing</li>
-              <li className="text-sm text-background/80">Structural Designing</li>
-              <li className="text-sm text-background/80">Building Plan Approval</li>
+          <div className="lg:col-span-3">
+            <h2 className="text-xs uppercase tracking-[0.14em] text-[#B5B5B5] font-medium mb-4">
+              Capabilities
+            </h2>
+            <ul className="space-y-2.5 text-sm text-[#EAEAEA]">
+              <li>
+                <Link to="/services#turnkey" className="hover:text-[#FFFFFF] transition-colors">
+                  Residential House Construction
+                </Link>
+              </li>
+              <li>
+                <Link to="/services#commercial" className="hover:text-[#FFFFFF] transition-colors">
+                  Commercial Construction
+                </Link>
+              </li>
+              <li>
+                <Link to="/services#architectural" className="hover:text-[#FFFFFF] transition-colors">
+                  Architectural Designing
+                </Link>
+              </li>
+              <li>
+                <Link to="/services#structural" className="hover:text-[#FFFFFF] transition-colors">
+                  Structural Designing
+                </Link>
+              </li>
+              <li>
+                <Link to="/services#approval" className="hover:text-[#FFFFFF] transition-colors">
+                  Building Plan Approval
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-lg font-heading font-semibold mb-4">Contact Us</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <Phone className="w-4 h-4 mt-1 text-background flex-shrink-0" />
-                <div className="text-sm text-background/80">
-                  <a href="tel:6374507535" className="hover:text-background transition-colors">
-                    63745 07535
+          {/* Contact */}
+          <div className="lg:col-span-3">
+            <h2 className="text-xs uppercase tracking-[0.14em] text-[#B5B5B5] font-medium mb-4">
+              Contact
+            </h2>
+            <ul className="space-y-3.5 text-sm text-[#EAEAEA]">
+              <li className="flex items-start gap-3">
+                <BrandIcon name="phone" invert className="w-4 h-4 mt-0.5" />
+                <div className="space-y-1.5">
+                  <a
+                    href={`tel:${SITE_CONFIG.contact.primaryPhoneTel}`}
+                    className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.1em] border border-[#2E2E2E] px-3 py-1.5 text-[#FFFFFF] hover:bg-[#222222] transition-colors"
+                  >
+                    Call Primary Line
                   </a>
                   <br />
-                  <a href="tel:7538880504" className="hover:text-background transition-colors">
-                    75388 80504
+                  <a
+                    href={`tel:${SITE_CONFIG.contact.secondaryPhoneTel}`}
+                    className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.1em] border border-[#2E2E2E] px-3 py-1.5 text-[#EAEAEA] hover:bg-[#222222] transition-colors"
+                  >
+                    Call Secondary Line
                   </a>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Mail className="w-4 h-4 mt-1 text-background flex-shrink-0" />
+              <li className="flex items-start gap-3">
+                <BrandIcon name="contact-mail" invert className="w-4 h-4 mt-0.5" />
                 <a
-                  href="mailto:adithyaconstructionscbe@gmail.com"
-                  className="text-sm text-background/80 hover:text-background transition-colors break-all"
+                  href={`mailto:${SITE_CONFIG.contact.email}`}
+                  className="hover:text-[#FFFFFF] break-all"
                 >
-                  adithyaconstructionscbe@gmail.com
+                  {SITE_CONFIG.contact.email}
                 </a>
               </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-1 text-background flex-shrink-0" />
-                <span className="text-sm text-background/80">Coimbatore, Salem</span>
+              <li className="flex items-start gap-3">
+                <BrandIcon name="location-pin" invert className="w-4 h-4 mt-0.5" />
+                <span>{SITE_CONFIG.contact.officeAddress}</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Instagram className="w-4 h-4 mt-1 text-background flex-shrink-0" />
+              <li className="flex items-start gap-3">
+                <Instagram className="w-4 h-4 mt-0.5 text-[#FFFFFF] shrink-0" />
                 <a
-                  href="https://instagram.com/_adithya_constructions"
+                  href={SITE_CONFIG.contact.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-background/80 hover:text-background transition-colors"
+                  className="hover:text-[#FFFFFF]"
                 >
-                  @_adithya_constructions
+                  {SITE_CONFIG.contact.instagramHandle}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-background/20 text-center">
-          <p className="text-sm text-background/70">
-            © {new Date().getFullYear()} Adithya Constructions & Architects. All rights reserved.
+        <div className="mt-10 pt-6 border-t border-[#2E2E2E] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#B5B5B5]">
+          <p>
+            © {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
           </p>
-          <p className="text-xs text-background/60 mt-2">
-            Developed by Manoj,{' '}
-            <a href="mailto:manoj12k6@gmail.con" className="underline hover:text-background">
-              manoj12k6@gmail.con
-            </a>
-          </p>
+          <p>Coimbatore &amp; Salem, Tamil Nadu, India</p>
         </div>
       </div>
     </footer>

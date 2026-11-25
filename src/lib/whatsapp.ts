@@ -74,12 +74,19 @@ Sent from Adithya Constructions website`;
 };
 
 /**
- * Open WhatsApp with formatted message
+ * Open WhatsApp with formatted message (sanitized and with noopener,noreferrer)
  */
 export const sendToWhatsApp = (message: string): void => {
-  const encodedMessage = encodeURIComponent(message);
+  const sanitized = Array.from(message)
+    .filter((ch) => {
+      const code = ch.charCodeAt(0);
+      return code === 9 || code === 10 || (code >= 32 && code !== 127);
+    })
+    .join("")
+    .slice(0, 2000);
+  const encodedMessage = encodeURIComponent(sanitized);
   const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
-  window.open(whatsappUrl, "_blank");
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 };
 
 /**

@@ -1,56 +1,62 @@
-import { motion } from "framer-motion";
-
 const files = [
-  "asian paints.jpg",
-  "finolex pipes.jpg",
-  "gm switches.jpg",
-  "indrola tmt bars.jpg",
-  "jaquar.jpg",
-  "jsw steels.jpg",
-  "kajaria tiles.jpg",
-  "legrand.jpg",
-  "nippon paints.jpg",
-  "ramco cements.jpg",
-  "somany tiles.jpg",
-  "supreme plastic.jpg",
-  "tata steels.jpg",
-  "ultratech cement.jpg",
+  { file: "asian paints.jpg", label: "Asian Paints" },
+  { file: "finolex pipes.jpg", label: "Finolex Pipes" },
+  { file: "gm switches.jpg", label: "GM Switches" },
+  { file: "indrola tmt bars.jpg", label: "Indrola TMT Bars" },
+  { file: "jaquar.jpg", label: "Jaquar" },
+  { file: "jsw steels.jpg", label: "JSW Steel" },
+  { file: "kajaria tiles.jpg", label: "Kajaria Tiles" },
+  { file: "legrand.jpg", label: "Legrand" },
+  { file: "nippon paints.jpg", label: "Nippon Paint" },
+  { file: "ramco cements.jpg", label: "Ramco Cements" },
+  { file: "somany tiles.jpg", label: "Somany Tiles" },
+  { file: "supreme plastic.jpg", label: "Supreme Pipes" },
+  { file: "tata steels.jpg", label: "Tata Steel" },
+  { file: "ultratech cement.jpg", label: "UltraTech Cement" },
 ];
 
-const logos = files.map((name) => `/logos/${encodeURIComponent(name)}`);
+const logos = files.map((item) => ({
+  src: `/logos/${encodeURIComponent(item.file)}`,
+  label: item.label,
+}));
 const loopLogos = [...logos, ...logos];
 
 const ClientLogosMarquee = () => {
   return (
-    <section className="py-16 px-4 lg:px-8 bg-background">
-      <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
-            Brands <span className="text-primary">We use</span>
-          </h2>
-          <p className="text-muted-foreground mt-2">Trusted by leading brands and partners</p>
-        </motion.div>
+    <section className="py-16 md:py-20 bg-[#FFFFFF] border-b border-[#EAEAEA]">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <div>
+            <p className="eyebrow mb-2">Material Specification</p>
+            <h2
+              className="font-display font-semibold text-[#111111]"
+              style={{ fontSize: "var(--text-h2)" }}
+            >
+              Certified Materials &amp; Partners
+            </h2>
+          </div>
+          <p className="text-sm text-[#444444] max-w-md">
+            We specify ISI-certified steel, cement, electrical, plumbing, and finishing brands across our residential and commercial builds.
+          </p>
+        </div>
 
-        <div className="relative overflow-hidden rounded-2xl bg-card border border-border shadow-medium">
-
-          <div className="flex items-center gap-6 md:gap-10 py-6 md:py-8 animate-[marquee_12s_linear_infinite] md:animate-[marquee_16s_linear_infinite] lg:animate-[marquee_18s_linear_infinite]" style={{ willChange: 'transform' }}>
-            {loopLogos.map((src, i) => (
-              <div key={`${src}-${i}`} className="shrink-0">
-                <div className="glass-card shadow-soft hover:shadow-medium transition-all duration-300 hover-lift rounded-xl p-3 border border-border">
-                  <img
-                    src={src}
-                    alt="Client logo"
-                    className="h-10 md:h-12 w-auto object-contain transition duration-300"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </div>
+        <div className="relative overflow-hidden border border-[#EAEAEA] bg-[#F5F5F5]">
+          <div
+            className="flex items-center gap-6 md:gap-8 py-6 px-4 animate-[marquee_28s_linear_infinite]"
+            style={{ willChange: "transform" }}
+          >
+            {loopLogos.map((logo, i) => (
+              <div
+                key={`${logo.label}-${i}`}
+                className="shrink-0 bg-[#FFFFFF] border border-[#EAEAEA] px-5 py-3 flex items-center justify-center"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.label}
+                  className="h-9 md:h-11 w-auto object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             ))}
           </div>

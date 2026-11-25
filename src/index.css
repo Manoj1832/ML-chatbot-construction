@@ -1,106 +1,36 @@
-/* -----------------------------------------------------------
-   PREMIUM CONSTRUCTION WEBSITE DESIGN SYSTEM
-   TYPOGRAPHY • SHADOWS • GLASSMORPHISM • GRADIENTS • UTILITIES
------------------------------------------------------------ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "./styles/design-tokens.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-/* -----------------------------------------------------------
-   BASE VARIABLES
------------------------------------------------------------ */
-@layer base {
-  :root {
-    --background: 0 0% 98%;
-    --background-secondary: 0 0% 96%;
-    --background-accent: 0 0% 94%;
-    --foreground: 0 0% 12%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 12%;
-    --card-elevated: 0 0% 98%;
-
-    --primary: 0 0% 35%;
-    --primary-light: 0 0% 50%;
-    --primary-dark: 0 0% 25%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 50%;
-
-    --secondary: 0 0% 40%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-light: 0 0% 50%;
-
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 0 0% 92%;
-    --accent-foreground: 0 0% 12%;
-    --accent-light: 0 0% 96%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 85%;
-    --input: 0 0% 88%;
-    --ring: 0 0% 30%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
-
-    --radius: 1rem;
-
-    --gradient-gold: linear-gradient(135deg, hsl(0 0% 96%) 0%, hsl(0 0% 92%) 100%);
-    --gradient-gold-subtle: linear-gradient(135deg, hsl(0 0% 96% / 0.6) 0%, hsl(0 0% 92% / 0.4) 100%);
-    --gradient-radial: radial-gradient(circle at center, hsl(0 0% 92% / 0.4) 0%, transparent 70%);
-
-    --gradient-mesh: 
-      radial-gradient(at 0% 0%, hsl(0 0% 97%) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsl(0 0% 96%) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, hsl(0 0% 95%) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsl(0 0% 97%) 0px, transparent 50%);
-
-    --shadow-soft: 0 1px 3px hsla(0, 0%, 20%, 0.04), 0 1px 2px hsla(0, 0%, 20%, 0.03);
-    --shadow-medium: 0 4px 6px hsla(0, 0%, 20%, 0.05), 0 2px 4px hsla(0, 0%, 20%, 0.04);
-    --shadow-large: 0 10px 24px hsla(0, 0%, 20%, 0.08), 0 4px 8px hsla(0, 0%, 20%, 0.05);
-    --shadow-gold: 0 8px 32px hsla(0, 0%, 20%, 0.15), 0 4px 16px hsla(0, 0%, 20%, 0.1);
-    --shadow-gold-hover: 0 12px 40px hsla(0, 0%, 20%, 0.2), 0 6px 20px hsla(0, 0%, 20%, 0.12);
-    --shadow-elevated: 0 20px 48px hsla(0, 0%, 20%, 0.12), 0 8px 16px hsla(0, 0%, 20%, 0.08);
-
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-}
-
-
-/* -----------------------------------------------------------
-   GLOBAL ELEMENTS
------------------------------------------------------------ */
 @layer base {
   * {
     @apply border-border;
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
   }
 
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-    background: var(--gradient-mesh);
-    background-attachment: fixed;
-    line-height: 1.5;
-    font-size: 16px;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-family: var(--font-sans);
+    font-size: var(--text-body-size);
+    line-height: 1.65;
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    color: var(--color-black);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
   }
 
   img, iframe {
@@ -111,190 +41,81 @@
   section {
     width: 100%;
   }
+
+  /* Accessible focus ring across light and dark surfaces */
+  :focus-visible {
+    outline: 2px solid var(--color-black);
+    outline-offset: 2px;
+  }
 }
 
-
-/* -----------------------------------------------------------
-   UTILITIES
------------------------------------------------------------ */
 @layer utilities {
-
-  /* Gradients */
-  .gold-gradient {
-    background: var(--gradient-gold);
-  }
-  .gold-gradient-subtle {
-    background: var(--gradient-gold-subtle);
-  }
-  .premium-gradient-dark {
-    background: linear-gradient(135deg, #1c1c1c, #3a3a3a, #0f0f0f);
-  }
-  .premium-gradient-light {
-    background: linear-gradient(135deg, #f7f7f7, #eaeaea, #f3f3f3);
-  }
-
   .heading-display {
-    font-family: 'Cinzel', serif;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
   }
 
-  /* Glass */
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(20px);
+  .eyebrow {
+    font-size: var(--text-eyebrow);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-medium-grey);
   }
+
+  .hairline-border {
+    border: 1px solid var(--color-light-grey);
+  }
+
+  .editorial-photo {
+    transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Compatibility aliases for existing subpages refactored incrementally */
+  .gold-gradient {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
   .glass-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(16px);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-light-grey);
   }
 
-  /* Shadows */
-  .shadow-premium {
-    box-shadow: var(--shadow-large);
-  }
-  .shadow-gold-premium {
-    box-shadow: var(--shadow-gold);
-  }
+  .shadow-soft,
+  .shadow-medium,
+  .shadow-large,
+  .shadow-gold,
+  .shadow-gold-hover,
   .shadow-elevated {
-    box-shadow: var(--shadow-elevated);
+    box-shadow: 0 1px 2px rgba(17, 17, 17, 0.04);
   }
-
-  /* Hover Effects */
-  .hover-lift {
-    transition: var(--transition-smooth);
-  }
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-large);
-  }
-  .hover-glow:hover {
-    box-shadow: var(--shadow-gold-hover);
-  }
-
-  /* Texture */
-  .bg-dots {
-    background-image: radial-gradient(circle, hsl(0 0% 50% / 0.12) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-  .bg-grid {
-    background-image: 
-      linear-gradient(to right, hsl(0 0% 70% / 0.35) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(0 0% 70% / 0.35) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  .noise-bg {
-    background-image: url('/assets/textures/noise.png');
-    opacity: 0.05;
-    pointer-events: none;
-  }
-
-  /* Animations */
-  .animate-fade-in { animation: fadeIn 0.8s ease forwards; }
-  .animate-slide-up { animation: slideUp 0.8s ease forwards; }
-  .animate-scale-in { animation: scaleIn 0.6s ease forwards; }
-  .animate-float { animation: float 3s ease-in-out infinite; }
-  .animate-glow { animation: glow 1s ease-in-out infinite; }
-  .animate-marquee { animation: marquee 28s linear infinite; }
-
-  /* Logo background + shine */
-  .logo-dark-bg {
-    background-color: #0f0f0f;
-    border-color: hsla(0,0%,100%,0.3);
-    color: white;
-  }
-  .logo-shine-7s {
-    position: relative;
-    overflow: hidden;
-  }
-  .logo-shine-7s::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -150%;
-    height: 100%;
-    width: 150%;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.0) 40%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.0) 60%, transparent 100%);
-    transform: translateX(0);
-    animation: logoShineCycle 7s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  /* Text wipe shine overlay (keeps original text color) */
-  .text-wipe-shine {
-    position: relative;
-    display: inline-block;
-  }
-  .text-wipe-shine::after {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255, 193, 7, 0.75) 50%, rgba(255,255,255,0) 100%);
-    transform: translateX(-130%);
-    animation: textWipeShine 4.5s ease-in-out infinite;
-    pointer-events: none;
-    mix-blend-mode: screen;
-  }
-}
-
-
-/* -----------------------------------------------------------
-   KEYFRAMES
------------------------------------------------------------ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
-  50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.5); }
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Shine cycle with long idle and short sweep */
-@keyframes logoShineCycle {
-  0%, 85% { left: -150%; opacity: 0; }
-  90% { left: 0%; opacity: 0.6; }
-  100% { left: 150%; opacity: 0; }
-}
-
-/* Wipe shine across text */
-@keyframes textWipeShine {
-  0%, 80% { transform: translateX(-130%); opacity: 0; }
-  90% { transform: translateX(0%); opacity: 1; }
-  100% { transform: translateX(130%); opacity: 0; }
-}
-
-@media (max-width: 480px) {
-  body {
-    font-size: 14px;
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-@media (max-width: 768px) {
-  body {
-    background-attachment: scroll;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

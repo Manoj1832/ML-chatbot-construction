@@ -1,0 +1,92 @@
+/* -----------------------------------------------------------
+   ADITHYA CONSTRUCTIONS — MONOCHROME DESIGN TOKENS
+   Distribution: 70% light / 20% dark / 10% grey borders & accents
+   ----------------------------------------------------------- */
+
+:root {
+  /* Core Monochrome Palette */
+  --color-white: #ffffff;
+  --color-bg-grey: #f5f5f5;
+  --color-light-grey: #eaeaea;
+  --color-medium-grey: #777777;
+  --color-dark-grey: #444444;
+  --color-charcoal: #222222;
+  --color-black: #111111;
+
+  /* Semantic Surface & Text Tokens */
+  --surface-primary: var(--color-white);
+  --surface-secondary: var(--color-bg-grey);
+  --surface-dark: var(--color-black);
+  --surface-dark-elevated: var(--color-charcoal);
+
+  --text-primary: var(--color-black);
+  --text-body: var(--color-dark-grey);
+  --text-muted: var(--color-medium-grey);
+  --text-inverse: var(--color-white);
+  --text-inverse-muted: #b5b5b5;
+
+  /* Hairline Borders & Dividers */
+  --border-hairline: 1px solid var(--color-light-grey);
+  --border-dark: 1px solid #2e2e2e;
+  --border-strong: 1px solid var(--color-black);
+
+  /* Typography */
+  --font-sans: 'Inter', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Responsive Type Scale (Desktop -> Mobile) */
+  --text-hero: clamp(1.875rem, 4vw, 3.75rem);      /* 30px -> 60px */
+  --text-h2: clamp(1.5rem, 2.5vw, 2.25rem);        /* 24px -> 36px */
+  --text-h3: clamp(1.0625rem, 1.25vw, 1.25rem);    /* 17px -> 20px */
+  --text-body-size: clamp(0.9375rem, 1vw, 1rem);   /* 15px -> 16px */
+  --text-caption: 0.875rem;                        /* 14px */
+  --text-eyebrow: 0.75rem;                         /* 12px */
+
+  /* Radii — crisp architectural geometry (no oversized 2xl) */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  /* Transitions */
+  --transition-base: 200ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Shadcn/Tailwind HSL Mappings (Monochrome Only) */
+  --background: 0 0% 100%;
+  --background-secondary: 0 0% 96%;
+  --background-accent: 0 0% 92%;
+  --foreground: 0 0% 7%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+  --card-elevated: 0 0% 96%;
+
+  --primary: 0 0% 7%;
+  --primary-light: 0 0% 27%;
+  --primary-dark: 0 0% 0%;
+  --primary-foreground: 0 0% 100%;
+  --primary-glow: 0 0% 27%;
+
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 7%;
+  --secondary-light: 0 0% 92%;
+
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 47%;
+
+  --accent: 0 0% 92%;
+  --accent-foreground: 0 0% 7%;
+  --accent-light: 0 0% 96%;
+
+  --destructive: 0 0% 13%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 0 0% 92%;
+  --input: 0 0% 85%;
+  --ring: 0 0% 7%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+
+  --radius: 0.25rem;
+}

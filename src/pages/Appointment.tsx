@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -12,52 +11,85 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Clock, User, Phone, Mail, MapPin, MessageSquare, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { sendAppointmentEmail, type AppointmentFormData } from "@/lib/emailjs";
+import { sendAppointmentEmail } from "@/lib/emailjs";
 import { sendAppointmentViaWhatsApp } from "@/lib/whatsapp";
+import { SITE_CONFIG } from "@/config/site";
+import { SITE_CONTENT } from "@/data/site-content";
+import { BrandIcon } from "@/components/common/BrandIcon";
+import { trackEvent } from "@/lib/telemetry";
+import {
+  appointmentSchema,
+  validateWithSchema,
+  type AppointmentInput,
+  type FieldErrors,
+} from "@/lib/validation";
+import { cn } from "@/lib/utils";
 
 const Appointment = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sendMethod, setSendMethod] = useState<"email" | "whatsapp">("email");
+  const [sendMethod, setSendMethod] = useState<"email" | "whatsapp">("whatsapp");
+  const [serviceValue, setServiceValue] = useState("");
+  const [errors, setErrors] = useState<FieldErrors<AppointmentInput>>({});
+  const { appointmentPage } = SITE_CONTENT;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-    const data: AppointmentFormData = {
-      name: formData.get("name") as string,
-      phone: formData.get("phone") as string,
-      email: formData.get("email") as string,
-      location: formData.get("location") as string,
-      service: formData.get("service") as string,
-      date: formData.get("date") as string,
-      time: formData.get("time") as string,
-      description: formData.get("description") as string,
+    const formEl = e.currentTarget;
+    const formData = new FormData(formEl);
+    const raw = {
+      name: String(formData.get("name") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      location: String(formData.get("location") ?? ""),
+      service: serviceValue || String(formData.get("service") ?? ""),
+      date: String(formData.get("date") ?? ""),
+      time: String(formData.get("time") ?? ""),
+      description: String(formData.get("description") ?? ""),
     };
 
+    const validation = validateWithSchema(appointmentSchema, raw);
+    if (!validation.success) {
+      setErrors(validation.errors);
+      trackEvent({
+        event: "form_validation_error",
+        metadata: { form: "appointment", fields: Object.keys(validation.errors).length },
+      });
+      return;
+    }
+
+    setErrors({});
+    setIsSubmitting(true);
+
     try {
+      trackEvent({
+        event: "form_submit",
+        metadata: { form: "appointment", method: sendMethod, service: validation.data.service },
+      });
+
       if (sendMethod === "email") {
-        await sendAppointmentEmail(data);
+        await sendAppointmentEmail(validation.data);
         toast({
-          title: "Appointment Request Sent!",
-          description: "We'll contact you shortly to confirm your appointment.",
+          title: "Appointment Request Sent",
+          description: "Our engineering team will contact you shortly to confirm.",
         });
-        (e.target as HTMLFormElement).reset();
+        formEl.reset();
+        setServiceValue("");
       } else {
-        sendAppointmentViaWhatsApp(data);
+        sendAppointmentViaWhatsApp(validation.data);
         toast({
-          title: "Opening WhatsApp...",
-          description: "You'll be redirected to WhatsApp to send your appointment request.",
+          title: "Opening WhatsApp",
+          description: "Continue in WhatsApp to send your appointment request.",
         });
-        // Don't reset form for WhatsApp as user might want to edit
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send appointment request. Please try again later.",
+        title: "Submission Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to submit appointment request. Please try WhatsApp or phone.",
         variant: "destructive",
       });
     } finally {
@@ -66,281 +98,281 @@ const Appointment = () => {
   };
 
   return (
-    <div className="pt-20 min-h-screen">
-      {/* Hero Section */}
-      <section className="py-20 px-4 lg:px-8 bg-background-secondary">
-        <div className="container mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <h1 className="text-5xl md:text-6xl font-heading font-bold text-foreground mb-6">
-              Book an <span className="text-primary">Appointment</span>
+    <div className="pt-16 min-h-screen bg-[#FFFFFF]">
+      {/* Header */}
+      <section className="py-10 md:py-16 bg-[#F5F5F5] border-b border-[#EAEAEA]">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-2">{appointmentPage.eyebrow}</p>
+            <h1
+              className="font-display font-semibold text-[#111111] mb-3"
+              style={{ fontSize: "var(--text-hero)" }}
+            >
+              {appointmentPage.headline}
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Schedule a free consultation with our expert team
+            <p className="text-sm md:text-base text-[#444444] leading-relaxed">
+              {appointmentPage.subtitle}
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Form Section */}
-      <section className="py-20 px-4 lg:px-8">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="space-y-8"
-            >
+      {/* Form & Details */}
+      <section className="py-10 md:py-16">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* Left Info */}
+            <div className="lg:col-span-5 space-y-5">
               <div>
-                <h2 className="text-3xl font-heading font-bold text-foreground mb-6">
-                  Get in Touch
+                <p className="eyebrow mb-1.5">{appointmentPage.panelEyebrow}</p>
+                <h2 className="font-display font-semibold text-xl md:text-2xl text-[#111111] mb-2">
+                  {appointmentPage.panelTitle}
                 </h2>
-                <p className="text-muted-foreground mb-8">
-                  Fill out the form and our team will get back to you within 24 hours. You can also reach us directly through the contact information below.
+                <p className="text-sm text-[#444444] leading-relaxed">
+                  {appointmentPage.panelDesc}
                 </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-primary" />
+              <div className="border-t border-[#EAEAEA] pt-5 space-y-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 border border-[#EAEAEA] bg-[#F5F5F5] flex items-center justify-center shrink-0">
+                    <BrandIcon name="phone" className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                    <a href="tel:6374507535" className="text-muted-foreground hover:text-primary">
-                      63745 07535
-                    </a>
-                    <br />
-                    <a href="tel:7538880504" className="text-muted-foreground hover:text-primary">
-                      75388 80504
-                    </a>
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#777777] mb-1.5">Phone</p>
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href={`tel:${SITE_CONFIG.contact.primaryPhoneTel}`}
+                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium uppercase tracking-[0.08em] bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] transition-colors"
+                      >
+                        Call Primary
+                      </a>
+                      <a
+                        href={`tel:${SITE_CONFIG.contact.secondaryPhoneTel}`}
+                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium uppercase tracking-[0.08em] border border-[#EAEAEA] text-[#111111] hover:border-[#111111] transition-colors"
+                      >
+                        Call Secondary
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-primary" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 border border-[#EAEAEA] bg-[#F5F5F5] flex items-center justify-center shrink-0">
+                    <BrandIcon name="contact-mail" className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Email</h3>
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#777777] mb-0.5">Email</p>
                     <a
-                      href="mailto:adithyaconstructionscbe@gmail.com"
-                      className="text-muted-foreground hover:text-primary break-all"
+                      href={`mailto:${SITE_CONFIG.contact.email}`}
+                      className="text-sm font-medium text-[#111111] hover:underline break-all"
                     >
-                      adithyaconstructionscbe@gmail.com
+                      {SITE_CONFIG.contact.email}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-primary" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 border border-[#EAEAEA] bg-[#F5F5F5] flex items-center justify-center shrink-0">
+                    <BrandIcon name="location-pin" className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Location</h3>
-                    <p className="text-muted-foreground">Coimbatore, Salem</p>
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#777777] mb-0.5">Service Region</p>
+                    <p className="text-sm font-medium text-[#111111]">{SITE_CONFIG.contact.officeAddress}</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-primary" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 border border-[#EAEAEA] bg-[#F5F5F5] flex items-center justify-center shrink-0">
+                    <Clock className="w-4 h-4 text-[#111111]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Working Hours</h3>
-                    <p className="text-muted-foreground">Mon - Sat: 9:00 AM - 6:00 PM</p>
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#777777] mb-0.5">Hours</p>
+                    <p className="text-sm font-medium text-[#111111]">{SITE_CONFIG.contact.workingHours}</p>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <form onSubmit={handleSubmit} className="bg-card p-8 rounded-2xl shadow-medium space-y-6">
-                {/* Send Method Selection */}
-                <div className="space-y-3 p-4 bg-background-secondary rounded-lg border border-border">
-                  <Label className="text-sm font-semibold">Choose how to send your request:</Label>
-                  <RadioGroup
-                    value={sendMethod}
-                    onValueChange={(value) => setSendMethod(value as "email" | "whatsapp")}
-                    className="flex gap-6"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="email" id="email-method" />
-                      <Label
-                        htmlFor="email-method"
-                        className="flex items-center gap-2 cursor-pointer font-normal"
-                      >
-                        <Mail className="w-4 h-4" />
-                        Email
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="whatsapp" id="whatsapp-method" />
-                      <Label
-                        htmlFor="whatsapp-method"
-                        className="flex items-center gap-2 cursor-pointer font-normal"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        WhatsApp
-                      </Label>
-                    </div>
-                  </RadioGroup>
+            {/* Right Form */}
+            <div className="lg:col-span-7">
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                className="border border-[#EAEAEA] bg-[#FFFFFF] p-5 md:p-8 space-y-4"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#EAEAEA] pb-4">
+                  <h2 className="font-display font-semibold text-xl text-[#111111]">
+                    {appointmentPage.formTitle}
+                  </h2>
+
+                  <div className="inline-grid grid-cols-2 border border-[#EAEAEA] shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setSendMethod("whatsapp")}
+                      className={cn(
+                        "h-9 px-3 flex items-center justify-center gap-1.5 text-xs font-medium transition-colors",
+                        sendMethod === "whatsapp"
+                          ? "bg-[#111111] text-[#FFFFFF]"
+                          : "bg-[#FFFFFF] text-[#444444] hover:bg-[#F5F5F5]"
+                      )}
+                    >
+                      <BrandIcon name="whatsapp" invert={sendMethod === "whatsapp"} className="w-3.5 h-3.5" />
+                      WhatsApp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSendMethod("email")}
+                      className={cn(
+                        "h-9 px-3 flex items-center justify-center gap-1.5 text-xs font-medium transition-colors border-l border-[#EAEAEA]",
+                        sendMethod === "email"
+                          ? "bg-[#111111] text-[#FFFFFF]"
+                          : "bg-[#FFFFFF] text-[#444444] hover:bg-[#F5F5F5]"
+                      )}
+                    >
+                      <BrandIcon name="contact-mail" invert={sendMethod === "email"} className="w-3.5 h-3.5" />
+                      Email
+                    </button>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name *</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+                <div className="space-y-1.5">
+                  <Label htmlFor="name" className="text-xs">Full Name *</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    placeholder="Your full name"
+                    aria-invalid={Boolean(errors.name)}
+                    className="h-10 rounded-sm"
+                  />
+                  {errors.name && (
+                    <p className="text-xs text-[#111111] font-medium">{errors.name}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone" className="text-xs">Mobile (10-digit) *</Label>
                     <Input
-                      id="name"
-                      name="name"
-                      placeholder="Your name"
-                      required
-                      className="pl-10"
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      inputMode="numeric"
+                      placeholder="98765 43210"
+                      aria-invalid={Boolean(errors.phone)}
+                      className="h-10 rounded-sm"
                     />
+                    {errors.phone && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.phone}</p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email" className="text-xs">Email *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      aria-invalid={Boolean(errors.email)}
+                      className="h-10 rounded-sm"
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.email}</p>
+                    )}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number *</Label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        placeholder="Your phone"
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Your email"
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location *</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="location" className="text-xs">Plot Location *</Label>
                     <Input
                       id="location"
                       name="location"
-                      placeholder="Your location"
-                      required
-                      className="pl-10"
+                      placeholder="e.g., RS Puram, Coimbatore"
+                      aria-invalid={Boolean(errors.location)}
+                      className="h-10 rounded-sm"
                     />
+                    {errors.location && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.location}</p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="service" className="text-xs">Service Required *</Label>
+                    <Select name="service" value={serviceValue} onValueChange={setServiceValue}>
+                      <SelectTrigger id="service" className="h-10 rounded-sm">
+                        <SelectValue placeholder="Select a service" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="turnkey">Residential House Construction</SelectItem>
+                        <SelectItem value="commercial">Commercial / PEB Construction</SelectItem>
+                        <SelectItem value="architectural">Architectural &amp; Vaastu Design</SelectItem>
+                        <SelectItem value="structural">Structural Engineering</SelectItem>
+                        <SelectItem value="interior">Interior Works</SelectItem>
+                        <SelectItem value="approval">DTCP / Plan Approval</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.service && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.service}</p>
+                    )}
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="service">Service Required *</Label>
-                  <Select name="service" required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="turnkey">Residential House Construction</SelectItem>
-                      <SelectItem value="commercial">Commercial Construction</SelectItem>
-                      <SelectItem value="architectural">Architectural Designing</SelectItem>
-                      <SelectItem value="structural">Structural Designing</SelectItem>
-                      <SelectItem value="structural">Interior Works</SelectItem>
-                      <SelectItem value="approval">Building Plan Approval</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="date">Preferred Date *</Label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="time">Preferred Time *</Label>
-                    <div className="relative">
-                      <Clock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        id="time"
-                        name="time"
-                        type="time"
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Project Description</Label>
-                  <div className="relative">
-                    <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                    <Textarea
-                      id="description"
-                      name="description"
-                      placeholder="Tell us about your project..."
-                      rows={4}
-                      className="pl-10"
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="date" className="text-xs">Preferred Date *</Label>
+                    <Input
+                      id="date"
+                      name="date"
+                      type="date"
+                      aria-invalid={Boolean(errors.date)}
+                      className="h-10 rounded-sm"
                     />
+                    {errors.date && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.date}</p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="time" className="text-xs">Preferred Time *</Label>
+                    <Input
+                      id="time"
+                      name="time"
+                      type="time"
+                      aria-invalid={Boolean(errors.time)}
+                      className="h-10 rounded-sm"
+                    />
+                    {errors.time && (
+                      <p className="text-xs text-[#111111] font-medium">{errors.time}</p>
+                    )}
                   </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  variant="gold"
-                  size="lg"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
+                <div className="space-y-1.5">
+                  <Label htmlFor="description" className="text-xs">Plot Brief (Optional)</Label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    placeholder="Plot dimensions (e.g., 30x40), facing, or floors..."
+                    rows={3}
+                    className="rounded-sm"
+                  />
+                </div>
+
+                <Button type="submit" size="default" className="w-full md:h-11" disabled={isSubmitting}>
                   {sendMethod === "email" ? (
                     <>
-                      <Mail className="w-5 h-5" />
+                      <BrandIcon name="contact-mail" invert className="w-4 h-4" />
                       {isSubmitting ? "Submitting..." : "Submit via Email"}
                     </>
                   ) : (
                     <>
-                      <MessageCircle className="w-5 h-5" />
+                      <BrandIcon name="whatsapp" invert className="w-4 h-4" />
                       {isSubmitting ? "Opening..." : "Submit via WhatsApp"}
                     </>
                   )}
                 </Button>
               </form>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>

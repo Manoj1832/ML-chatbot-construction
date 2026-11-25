@@ -55,17 +55,11 @@ export const sendContactEmail = async (data: ContactFormData): Promise<void> => 
   try {
     await emailjs.send(SERVICE_ID, CONTACT_TEMPLATE_ID, templateParams);
   } catch (error: unknown) {
-    console.error('EmailJS error:', error);
-
-    const e = error as { status?: number; text?: string };
+    const e = error as { status?: number };
     if (e?.status === 400) {
-      if (e?.text?.includes('Public Key')) {
-        throw new Error('EmailJS Public Key is invalid. Please check your .env file configuration.');
-      }
-      throw new Error(`EmailJS error: ${e?.text || 'Invalid configuration. Please check your EmailJS setup.'}`);
+      throw new Error('Unable to send email due to invalid configuration. Please use WhatsApp or Call Studio.');
     }
-
-    throw new Error(e?.text || 'Failed to send email. Please try again later or use WhatsApp instead.');
+    throw new Error('Failed to send email. Please try again later or use WhatsApp instead.');
   }
 };
 
@@ -95,17 +89,11 @@ export const sendAppointmentEmail = async (data: AppointmentFormData): Promise<v
   try {
     await emailjs.send(SERVICE_ID, APPOINTMENT_TEMPLATE_ID, templateParams);
   } catch (error: unknown) {
-    console.error('EmailJS error:', error);
-
-    const e = error as { status?: number; text?: string };
+    const e = error as { status?: number };
     if (e?.status === 400) {
-      if (e?.text?.includes('Public Key')) {
-        throw new Error('EmailJS Public Key is invalid. Please check your .env file configuration.');
-      }
-      throw new Error(`EmailJS error: ${e?.text || 'Invalid configuration. Please check your EmailJS setup.'}`);
+      throw new Error('Unable to send appointment request due to invalid configuration. Please use WhatsApp or Call Studio.');
     }
-
-    throw new Error(e?.text || 'Failed to send appointment request. Please try again later or use WhatsApp instead.');
+    throw new Error('Failed to send appointment request. Please try again later or use WhatsApp instead.');
   }
 };
 

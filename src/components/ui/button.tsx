@@ -5,24 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-medium tracking-[-0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-soft hover:shadow-medium hover:bg-primary-dark hover:scale-105 active:scale-95",
-        destructive: "bg-destructive text-destructive-foreground shadow-soft hover:shadow-medium hover:bg-destructive/90",
-        outline: "border-2 border-input bg-background text-foreground hover:bg-muted hover:border-border shadow-soft hover:shadow-medium",
-        secondary: "bg-secondary text-secondary-foreground shadow-soft hover:shadow-medium hover:bg-secondary-light",
-        ghost: "hover:bg-muted hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline hover:text-primary-dark",
-        gold: "gold-gradient text-foreground shadow-gold hover:shadow-gold-hover hover:scale-105 active:scale-95 font-bold tracking-wide",
-        "outline-gold": "border-2 border-primary text-foreground bg-transparent hover:gold-gradient hover:text-foreground hover:border-transparent shadow-soft hover:shadow-gold hover:scale-105 active:scale-95 font-semibold",
+        default: "bg-[#111111] text-[#FFFFFF] hover:bg-[#222222]",
+        destructive: "bg-[#222222] text-[#FFFFFF] hover:bg-[#111111]",
+        outline: "border border-[#111111] bg-transparent text-[#111111] hover:bg-[#111111] hover:text-[#FFFFFF]",
+        secondary: "bg-[#F5F5F5] text-[#111111] border border-[#EAEAEA] hover:bg-[#EAEAEA]",
+        ghost: "text-[#111111] hover:bg-[#F5F5F5]",
+        link: "text-[#111111] underline-offset-4 hover:underline",
+        /* Monochrome mappings for legacy variant names */
+        gold: "bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] font-medium",
+        "outline-gold": "border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:border-[#111111] hover:bg-[#F5F5F5]",
       },
       size: {
         default: "h-11 px-5 py-2.5 text-sm",
-        sm: "h-9 rounded-lg px-4 text-xs",
-        lg: "h-12 rounded-xl px-8 text-base",
-        xl: "h-14 rounded-xl px-10 text-base",
+        sm: "h-10 px-4 text-xs",
+        lg: "h-12 px-7 text-sm",
+        xl: "h-13 px-8 py-3.5 text-base",
         icon: "h-11 w-11",
       },
     },

@@ -8,9 +8,9 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1320px",
       },
     },
     extend: {
@@ -58,43 +58,34 @@ export default {
           elevated: "hsl(var(--card-elevated))",
           foreground: "hsl(var(--card-foreground))",
         },
+        mono: {
+          white: "#FFFFFF",
+          surface: "#F5F5F5",
+          border: "#EAEAEA",
+          muted: "#777777",
+          body: "#444444",
+          charcoal: "#222222",
+          black: "#111111",
+        },
       },
       fontFamily: {
-        heading: ['Cinzel', 'Georgia', 'serif'],
-        body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-      },
-      boxShadow: {
-        'soft': 'var(--shadow-soft)',
-        'medium': 'var(--shadow-medium)',
-        'large': 'var(--shadow-large)',
-        'gold': 'var(--shadow-gold)',
-        'gold-hover': 'var(--shadow-gold-hover)',
-        'elevated': 'var(--shadow-elevated)',
-      },
-      backdropBlur: {
-        xs: '2px',
+        heading: ["DM Sans", "Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        display: ["DM Sans", "Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        body: ["Inter", "Manrope", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 1px)",
+        sm: "calc(var(--radius) - 2px)",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
