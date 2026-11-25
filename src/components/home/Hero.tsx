@@ -17,17 +17,8 @@ const Hero = () => {
             srcSet="/assets/hero/hero-desktop.webp"
             type="image/webp"
           />
-          <source
-            media="(min-width: 768px)"
-            srcSet="/assets/hero/hero-desktop.png"
-            type="image/png"
-          />
-          <source
-            srcSet="/assets/hero/hero-mobile.webp"
-            type="image/webp"
-          />
           <img
-            src="/assets/hero/hero-mobile.png"
+            src="/assets/hero/hero-mobile.webp"
             alt="Minimalist concrete residence designed and built by Adithya Constructions"
             className="w-full h-full object-cover object-bottom md:object-right"
             fetchPriority="high"

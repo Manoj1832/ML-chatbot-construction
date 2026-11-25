@@ -120,17 +120,8 @@ const Index = () => {
                 srcSet="/assets/services/service-desktop.webp"
                 type="image/webp"
               />
-              <source
-                media="(min-width: 768px)"
-                srcSet="/assets/services/service-desktop.png"
-                type="image/png"
-              />
-              <source
-                srcSet="/assets/services/service-mobile.webp"
-                type="image/webp"
-              />
               <img
-                src="/assets/services/service-mobile.png"
+                src="/assets/services/service-mobile.webp"
                 alt="Commercial architectural facade in concrete and glass"
                 className="w-full h-[190px] sm:h-[260px] md:h-[340px] object-cover object-bottom md:object-right"
                 loading="lazy"

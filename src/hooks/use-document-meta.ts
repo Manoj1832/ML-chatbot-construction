@@ -8,29 +8,29 @@ interface RouteMeta {
 
 const ROUTE_META: Record<string, RouteMeta> = {
   "/": {
-    title: `${SITE_CONFIG.name} | Coimbatore & Salem`,
+    title: `Adithya Construction | Best Engineering, Architecture & Budget-Friendly Buildings`,
     description:
-      "Turnkey residential construction, commercial buildings, architectural design, structural engineering, and DTCP approvals in Coimbatore & Salem.",
+      "Cost-effective, low-budget to premium residential construction, commercial buildings, architecture, and structural engineering in Coimbatore & Salem.",
   },
   "/about": {
-    title: `About Us | ${SITE_CONFIG.shortName}`,
+    title: `About Us — Best Engineering & Architecture | ${SITE_CONFIG.shortName}`,
     description:
-      "Engineering-led architectural and construction studio in Coimbatore and Salem led by Er. Boobalan V. and Er. Premi T.",
+      "Civil-engineer-led architecture and cost-effective building studio in Coimbatore & Salem led by Er. Boobalan V. and Er. Premi T.",
   },
   "/services": {
-    title: `Services | ${SITE_CONFIG.shortName}`,
+    title: `Construction, Architecture & Engineering Services | ${SITE_CONFIG.shortName}`,
     description:
-      "Residential house construction, commercial construction, architectural designing, structural engineering, and building plan approvals.",
+      "Budget-friendly and premium residential house construction, commercial buildings, architectural design, structural engineering, and DTCP approvals.",
   },
   "/projects": {
-    title: `Projects Portfolio | ${SITE_CONFIG.shortName}`,
+    title: `Buildings & Projects Portfolio | ${SITE_CONFIG.shortName}`,
     description:
-      "Completed residential, commercial, PEB steel, interior, and renovation projects across Coimbatore.",
+      "Completed residential homes, commercial buildings, PEB steel structures, interiors, and renovations in Coimbatore & Salem.",
   },
   "/packages": {
-    title: `Construction Packages | ${SITE_CONFIG.shortName}`,
+    title: `Low-Budget to Premium Construction Packages | ${SITE_CONFIG.shortName}`,
     description:
-      "Compare Standard, Premium, and Luxury turnkey residential construction packages and material specifications.",
+      "Compare cost-effective Standard, budget-friendly, Premium, and Luxury turnkey building packages with locked material brands.",
   },
   "/quality-checklist": {
     title: `70-Point Quality Checklist | ${SITE_CONFIG.shortName}`,

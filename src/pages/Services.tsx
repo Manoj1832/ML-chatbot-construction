@@ -37,14 +37,8 @@ const Services = () => {
                 srcSet="/assets/services/service-desktop.webp"
                 type="image/webp"
               />
-              <source
-                media="(min-width: 768px)"
-                srcSet="/assets/services/service-desktop.png"
-                type="image/png"
-              />
-              <source srcSet="/assets/services/service-mobile.webp" type="image/webp" />
               <img
-                src="/assets/services/service-mobile.png"
+                src="/assets/services/service-mobile.webp"
                 alt="Architectural concrete and glass structure"
                 className="w-full h-[200px] md:h-[320px] object-cover object-bottom md:object-right"
                 loading="eager"

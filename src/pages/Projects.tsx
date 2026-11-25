@@ -39,7 +39,7 @@ const projects = [
   { id: 18, title: "Interior Fit-Out 09", category: "Interior", image: "/assets/int10.jpg", location: "Coimbatore" },
   { id: 19, title: "Renovation Project 01", category: "Renovation", image: "/assets/renovation1.jpg", location: "Coimbatore" },
   { id: 20, title: "Renovation Project 02", category: "Renovation", image: "/assets/renovation2.jpg", location: "Coimbatore" },
-  { id: 21, title: "Renovation Project 03", category: "Renovation", image: "/assets/renovation3.png", location: "Coimbatore" },
+  { id: 21, title: "Renovation Project 03", category: "Renovation", image: "/assets/renovation3.webp", location: "Coimbatore" },
 ];
 
 type Project = (typeof projects)[number];
